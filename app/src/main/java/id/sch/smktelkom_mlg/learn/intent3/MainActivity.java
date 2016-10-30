@@ -6,9 +6,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import static android.R.attr.phoneNumber;
-import static android.R.id.message;
-
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -31,9 +28,24 @@ public class MainActivity extends AppCompatActivity {
                         composeSmsMessage("Pesan dari SMK Telkom Malang");
                     }
                 });
+
+        findViewById(R.id.imageViewBrowser)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openWebPage("http://www.smktelkom-mlg.sch.id/");
+                    }
+                });
     }
 
-    private void composeSmsMessage(String s) {
+    private void openWebPage(String url) {
+        Uri webpage = Uri.parse(url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
+        if (intent.resolveActivity(getPackageManager()) != null)
+            startActivity(intent);
+    }
+
+    private void composeSmsMessage(String message) {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
         intent.putExtra("sms_body", message);
@@ -41,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
     }
 
-    private void dialPhoneNumber(String s) {
+    private void dialPhoneNumber(String phoneNumber) {
         Intent intent = new Intent(Intent.ACTION_DIAL);
         intent.setData(Uri.parse("tel:" + phoneNumber));
         if (intent.resolveActivity(getPackageManager()) != null)
